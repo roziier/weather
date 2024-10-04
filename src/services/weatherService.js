@@ -58,13 +58,22 @@ const formatForecastWeather = (secs, offset, data) => {
     const hourly = data.filter(f => f.dt > secs)
         .slice(0,5)
         .map((f) => ({
-        temp: f.main.temp,
+        temp: Number((f.main.temp - 273.15).toFixed(0)),
         title: formatToLocalTime(f.dt, offset, "hh:mm a"),
         icon: `https://openweathermap.org/img/wn/${f.weather[0].icon}@2x.png`,
-        data: f.dt_txt
+        date: f.dt_txt
     }))
 
-    return {hourly}
+    const daily = data
+        .filter((f) => f.dt_txt.slice(-8) === "00:00:00")
+        .map((f) => ({
+            temp: Number((f.main.temp - 273.15).toFixed(0)),
+            title: formatToLocalTime(f.dt, offset, "ccc"),
+            icon: `https://openweathermap.org/img/wn/${f.weather[0].icon}@2x.png`,
+            date: f.dt_txt
+        }))
+
+    return {hourly, daily}
 }
 
 const getFormattedWeatherData = async (searchParams) => {
