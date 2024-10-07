@@ -1,16 +1,16 @@
 import React from 'react'
 
-export default function TimeAndLocation() {
+export default function TimeAndLocation({weather}) {
   return (
     <div>
       <div className="flex items-center justify-center my-6">
         <p className="text-xl font-extralight">
-            Friday, 4 October 2024  |  Local time: 18:11
+            {weather.formattedLocalTime}
         </p>
       </div>
       <div className="flex items-center justify-center my-3">
         <p className="text-3xl font-medium">
-            Cork, IE
+          {weather.name}, {weather.country}
         </p>
       </div>
     </div>
