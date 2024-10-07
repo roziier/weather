@@ -11,6 +11,14 @@ const App = () => {
   const [units, setUnits] = useState("metric")
   const [weather, setWeather] = useState(null)
 
+  function handleSubmit(city) {
+    setQuery({q: city})
+  }
+
+  function handleUnit(unit) {
+    setUnits(unit)
+  }
+
   const getWeather = async () => {
     const data = await getFormattedWeatherData({...query, units}).then((data) => {
       setWeather(data)
@@ -19,13 +27,22 @@ const App = () => {
 
   useEffect(() => {
     getWeather()
+    
   }, [query, units])
+
+  let cssClass = 'bg-gradient-to-tl from-sky-200 to-blue-600 shadow-xl shadow-gray-300'
+  if (units !== "metric") {
+    cssClass = 'bg-gradient-to-r from-red-500 to-orange-500'
+  }
+
+  console.log(weather);
 
 
   return (
-    <div className='mx-auto max-w-screen-lg mt-4 py-5 rounded-md px-32 bg-gradient-to-tl from-sky-200 to-blue-600 shadow-xl shadow-gray-300 '>
-      <TopButtons/>
-      <Inputs />
+    <div className={`mx-auto max-w-screen-lg mt-4 py-5 rounded-md px-32 ${cssClass}`}>
+      <TopButtons onCity={handleSubmit}/>
+      <Inputs onCity={handleSubmit} onUnit={handleUnit}/>
+      
       {weather && (
         <>
           <TimeAndLocation weather={weather}/>

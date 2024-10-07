@@ -18,6 +18,7 @@ const formatToLocalTime = (secs,
     DateTime.fromSeconds(secs + offset, {zone: 'utc'}).toFormat(format)
 
 const formatCurrent = (data) => {
+    console.log(data);
     const { 
         coord: {lat, lon},
         main: {temp, feels_like, temp_min, temp_max, humidity},
