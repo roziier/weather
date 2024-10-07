@@ -3,10 +3,10 @@ import { DateTime } from "luxon"
 const API_KEY = '8266357b4624952d92a408594a186d5f'
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/'
 
+
 const getWeatherData = (infoType, searchParams) => {
     const url = new URL(BASE_URL + infoType)
     url.search = new URLSearchParams({...searchParams, appid: API_KEY})
-
 
     return fetch(url)
         .then((res) => res.json())
@@ -35,10 +35,10 @@ const formatCurrent = (data) => {
     return {
         name,
         country,
-        temp: Number((temp - 273.15).toFixed(0)),
-        feels_like: Number((feels_like - 273.15).toFixed(0)),
-        temp_min: Number((temp_min - 273.15).toFixed(0)),
-        temp_max: Number((temp_max - 273.15).toFixed(0)),
+        temp: temp,
+        feels_like: feels_like,
+        temp_min: temp_min,
+        temp_max: temp_max,
         humidity,
         sunrise: formatToLocalTime(sunrise, timezone, 'hh:mm a'),
         sunset: formatToLocalTime(sunset, timezone, 'hh:mm a'),
@@ -54,20 +54,20 @@ const formatCurrent = (data) => {
 }
 
 const formatForecastWeather = (secs, offset, data) => {
-    //hourly
+    
     const hourly = data.filter(f => f.dt > secs)
         .slice(0,5)
         .map((f) => ({
-        temp: Number((f.main.temp - 273.15).toFixed(0)),
+        temp: f.main.temp,
         title: formatToLocalTime(f.dt, offset, "hh:mm a"),
         icon: `https://openweathermap.org/img/wn/${f.weather[0].icon}@2x.png`,
         date: f.dt_txt
     }))
-
+    
     const daily = data
         .filter((f) => f.dt_txt.slice(-8) === "00:00:00")
         .map((f) => ({
-            temp: Number((f.main.temp - 273.15).toFixed(0)),
+            temp: f.main.temp,
             title: formatToLocalTime(f.dt, offset, "ccc"),
             icon: `https://openweathermap.org/img/wn/${f.weather[0].icon}@2x.png`,
             date: f.dt_txt
